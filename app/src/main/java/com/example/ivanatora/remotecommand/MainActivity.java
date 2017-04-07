@@ -10,6 +10,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.Button;
 import android.util.Log;
@@ -28,8 +29,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void connect(View view) {
+        String sHost = ((EditText) findViewById(R.id.txtHost)).getText().toString();
+        String sPort = ((EditText) findViewById(R.id.txtPort)).getText().toString();
+        String sUsername = ((EditText) findViewById(R.id.txtUsername)).getText().toString();
+        String sPassword = ((EditText) findViewById(R.id.txtPassword)).getText().toString();
+
+        Log.v(TAG, "params: " + sHost +":"+sPort+":"+sUsername+":"+sPassword);
+
+        if (sHost.isEmpty() || sPort.isEmpty() || sUsername.isEmpty() || sPassword.isEmpty()) {
+            Log.v(TAG, "have empty values");
+            Context context = getApplicationContext();
+            Toast.makeText(context, "Fill all fields", android.widget.Toast.LENGTH_LONG).show();
+            return;
+        }
+
         ConnectTask task = new ConnectTask();
-        task.execute();
+        task.execute(sHost, sPort, sUsername, sPassword);
     }
 
     public void cmdTurnOffDisplay(View view) {
@@ -111,9 +126,9 @@ public class MainActivity extends AppCompatActivity {
             JSch jsch = new JSch();
             Session session = null;
             try {
-                session = jsch.getSession("", "192.168.2.235", 22);
+                session = jsch.getSession(params[2], params[0], Integer.parseInt(params[1]));
                 session.setConfig(config);
-                session.setPassword("");
+                session.setPassword(params[3]);
                 session.connect();
                 session.setServerAliveInterval(1000);
 
