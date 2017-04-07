@@ -42,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void connect(View view) {
-        String sHost = ((EditText) findViewById(R.id.txtHost)).getText().toString();
-        String sPort = ((EditText) findViewById(R.id.txtPort)).getText().toString();
-        String sUsername = ((EditText) findViewById(R.id.txtUsername)).getText().toString();
-        String sPassword = ((EditText) findViewById(R.id.txtPassword)).getText().toString();
+        String sHost = ((EditText) findViewById(R.id.txtHost)).getText().toString().trim();
+        String sPort = ((EditText) findViewById(R.id.txtPort)).getText().toString().trim();
+        String sUsername = ((EditText) findViewById(R.id.txtUsername)).getText().toString().trim();
+        String sPassword = ((EditText) findViewById(R.id.txtPassword)).getText().toString().trim();
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
