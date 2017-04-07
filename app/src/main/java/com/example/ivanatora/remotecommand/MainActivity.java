@@ -2,6 +2,7 @@ package com.example.ivanatora.remotecommand;
 
 import java.util.Properties;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.example.ivanatora.remotecommand.ExecTask.*;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "RemoteCommand1";
+    public static final String PREFS_NAME = "MyPrefsFile";
 
     public static Session session = null;
 
@@ -26,6 +28,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        String sHost = settings.getString("host", "");
+        String sPort = settings.getString("port", "22");
+        String sUsername = settings.getString("username", "");
+        String sPassword = settings.getString("password", "");
+
+        ((EditText) findViewById(R.id.txtHost)).setText(sHost);
+        ((EditText) findViewById(R.id.txtPort)).setText(sPort);
+        ((EditText) findViewById(R.id.txtUsername)).setText(sUsername);
+        ((EditText) findViewById(R.id.txtPassword)).setText(sPassword);
     }
 
     public void connect(View view) {
@@ -33,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
         String sPort = ((EditText) findViewById(R.id.txtPort)).getText().toString();
         String sUsername = ((EditText) findViewById(R.id.txtUsername)).getText().toString();
         String sPassword = ((EditText) findViewById(R.id.txtPassword)).getText().toString();
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("host", sHost);
+        editor.putString("port", sPort);
+        editor.putString("username", sUsername);
+        editor.putString("password", sPassword);
+        editor.commit();
 
         Log.v(TAG, "params: " + sHost +":"+sPort+":"+sUsername+":"+sPassword);
 
